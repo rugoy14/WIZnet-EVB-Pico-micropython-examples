@@ -9,26 +9,5 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install toolchain
-        run: sudo apt-get install -y gcc-arm-none-eabi cmake python3
-
-      - name: Create W5500_EVB_PICO2 board
-        run: |
-          cp -r ports/rp2/boards/W5500_EVB_PICO ports/rp2/boards/W5500_EVB_PICO2
-          sed -i 's/wiznet_w5100s_evb_pico/pico2/g' ports/rp2/boards/W5500_EVB_PICO2/mpconfigboard.cmake
-          sed -i 's/W5500-EVB-Pico"/W5500-EVB-Pico2"/g' ports/rp2/boards/W5500_EVB_PICO2/mpconfigboard.h
-
-      - name: Build MicroPython cross-compiler first
-        run: make -C mpy-cross
-
-      - name: Build firmware
-        run: |
-          cd ports/rp2
-          make BOARD=W5500_EVB_PICO2 submodules
-          make BOARD=W5500_EVB_PICO2
-
-      - name: Upload firmware
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware-w5500-evb-pico2
-          path: ports/rp2/build-W5500_EVB_PICO2/firmware.uf2
+      - name: Show repo structure
+        run: find ports/rp2/boards -maxdepth 1 -type d | sort
